@@ -22,6 +22,7 @@ public:
 	bool isReads;
 	bool annotateAll; //give out OTU / READ even if not assigned??
 	bool nativeSlVdb;
+	bool checkTaxoUnkw; //check in the tax DB, if unkownn, ? etc levels are there and replaces with ?
 	int numThr; // number of threads
 	int taxDepth; //how deep does the taxonomy go?
 	double LCAfract;

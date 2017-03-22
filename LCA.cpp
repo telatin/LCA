@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 
 	for (int xi = 0; xi < (int) OPT->refDBs.size(); xi++) {
 		//read in tax DB
-		RefTax* RT = new RefTax( OPT->refDBs[xi], OPT->taxDepth, OPT->nativeSlVdb);
+		RefTax* RT = new RefTax( OPT->refDBs[xi], OPT->taxDepth, OPT->nativeSlVdb, OPT->checkTaxoUnkw);
 #ifdef DEBUG
 		cerr << "Ref tax read\n";
 #endif // DEBUG

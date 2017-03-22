@@ -33,7 +33,7 @@ void self_help() {
 options::options(int argc, char **argv,int defDep):
 	RefTaxFile(""), blastres(""), outF(""), input_format("bl8"),
 	BLfilter(true), calcHighMats(false), hitRD(false), isReads(false),
-	annotateAll(false), nativeSlVdb(false),
+	annotateAll(false), nativeSlVdb(false), checkTaxoUnkw(true),
 	numThr(1), taxDepth(defDep), LCAfract(0.9f), idThr(defDep,0),
 	blFiles(0), refDBs(0), Taxlvls(defDep)
 {
@@ -60,6 +60,8 @@ options::options(int argc, char **argv,int defDep):
 			hitRD = true;
 		else if (!strcmp(argv[i], "-no_bl_filter"))
 			BLfilter = false;
+		else if (!strcmp(argv[i], "-no_taxDB_filter"))
+			checkTaxoUnkw = false;
 		else if (!strcmp(argv[i], "-readInput"))
 			isReads = true;
 		else if (!strcmp(argv[i], "-SLVfmt"))

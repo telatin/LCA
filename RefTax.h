@@ -7,7 +7,7 @@ bool isGZfile(const string fi);
 
 struct TaxObj
 {
-	TaxObj(const string&, int, bool nativeSLV);
+	TaxObj(const string&, int, bool nativeSLV, bool doNotCheckTax);
 	TaxObj(TaxObj*t);
 	TaxObj(int d) :SavedTaxs(d, __unkwnTax), Subj(""), perID(0.f),depth(d) {}
 	//functions
@@ -37,7 +37,7 @@ struct TaxObj
 class RefTax
 {
 public:
-	RefTax(const string&,int tdep,bool);
+	RefTax(const string&,int tdep,bool,bool);
 	~RefTax();
 	void stats();
 	int depth() { return (int) tlevels.size(); }

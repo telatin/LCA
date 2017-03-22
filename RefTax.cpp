@@ -42,7 +42,7 @@ string TaxObj::getWriteString() {
 
 
 
-TaxObj::TaxObj(const string& X,int d, bool nativeSLV):SavedTaxs(d, __unkwnTax), Subj(""), perID(0.f),depth(0){
+TaxObj::TaxObj(const string& X,int d, bool nativeSLV, bool doNotCheckTax):SavedTaxs(d, __unkwnTax), Subj(""), perID(0.f),depth(0){
 	size_t fnd = 0;
 	//size_t offset = 1;
 	if (!nativeSLV) {
@@ -61,14 +61,14 @@ TaxObj::TaxObj(const string& X,int d, bool nativeSLV):SavedTaxs(d, __unkwnTax), 
 		}
 		trim(substr);
 		string lcsubstr(substr); transform(lcsubstr.begin(), lcsubstr.end(), lcsubstr.begin(), ::tolower);
-		bool checkTax = lcsubstr != "unclassified" && lcsubstr != "uncultured bacterium"
+		bool taxKnown = substr.length() > 0 && lcsubstr != "unclassified" && lcsubstr != "uncultured bacterium"
 			&& lcsubstr != "uncultured" && substr != "?";
-		if (substr.length() > 0 && checkTax) {
+		if ( doNotCheckTax || taxKnown) {
 			depth = cnt+1;
 			SavedTaxs[cnt] = substr;
 		} else {
 			//is already "?"
-			;
+			int x=0;
 		}
 		cnt++;
 		if (cnt >= d) {
@@ -104,7 +104,7 @@ void TaxObj::copyOver(TaxObj* oth) {
 
 
 
-RefTax::RefTax(const string& inF, int tdep, bool nativeSLV):TaxFile(inF),
+RefTax::RefTax(const string& inF, int tdep, bool nativeSLV,bool checktaxStr):TaxFile(inF),
 tlevels(tdep,"")
 {
 	//ini constants
@@ -120,7 +120,7 @@ tlevels(tdep,"")
 		size_t dlmt = line.find("\t");
 		string ID = line.substr(0, dlmt);
 		//string ttax = line.substr(dlmt+1);
-		TaxObj* t = new TaxObj(line.substr(dlmt + 1),7, nativeSLV);
+		TaxObj* t = new TaxObj(line.substr(dlmt + 1),7, nativeSLV, !checktaxStr);
 		auto fnd = Tlink.find(ID);
 		if (fnd == Tlink.end()){//all good
 			Tlink[ID] = t; TaxSingl++;
