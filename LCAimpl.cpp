@@ -28,7 +28,9 @@ TaxObj* LCA(list<BlastRes*> BR, RefTax* RT, options* opt) {
 	ret->Subj = (*BR.begin())->Query;
 
 	if (opt->hitRD ){
-		if (singularHit) {
+		if (opt->reportBestHit && (*BR.begin())->perID >= opt->idThr.back()) {
+			ret->addHitDB((*BR.begin())->Sbj);
+		} else if (singularHit) {
 			ret->addHitDB((*BR.begin())->Sbj);
 		} else {
 			ret->addHitDB(__unkwnTax);
@@ -171,7 +173,7 @@ double filterBlastPrimary(list<BlastRes*>& BR,bool maxHitOnly) {
 
 list<TaxObj*> BlastToTax(list<BlastRes*>& BR, RefTax* RT, options* opt, float& consPerID) {
 	list<TaxObj*> ret(0);
-	vector<double> thr = opt->idThr;
+	vector<double> &thr = opt->idThr;
 
 
 	int depth = RT->depth();
