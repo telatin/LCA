@@ -33,9 +33,9 @@ void self_help() {
 options::options(int argc, char **argv,int defDep):
 	RefTaxFile(""), blastres(""), outF(""), input_format("bl8"),
 	BLfilter(true), calcHighMats(false), hitRD(false), isReads(false),
-	annotateAll(false), nativeSlVdb(false), checkTaxoUnkw(true),
+	annotateAll(false), nativeSlVdb(false), reportID(false), checkTaxoUnkw(true),
 	numThr(1), taxDepth(defDep), LCAfract(0.9f), idThr(defDep,0),
-	blFiles(0), refDBs(0), Taxlvls(defDep)
+	blFiles(0), refDBs(0), Taxlvls(defDep), reportBestHit(false)
 {
 	idThr[1] = 78; idThr[2] = 88; idThr[3] = 91; idThr[4] = 93;
 	idThr[5] = 95; idThr[6] = 97;
@@ -64,6 +64,10 @@ options::options(int argc, char **argv,int defDep):
 			checkTaxoUnkw = false;
 		else if (!strcmp(argv[i], "-readInput"))
 			isReads = true;
+		else if (!strcmp(argv[i], "-reportID"))
+			reportID = true;
+		else if (!strcmp(argv[i], "-reportBestHit"))
+			reportBestHit = true;
 		else if (!strcmp(argv[i], "-SLVfmt"))
 			nativeSlVdb = true;
 		else if (!strcmp(argv[i], "-annotateAll"))

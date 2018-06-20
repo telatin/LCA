@@ -18,10 +18,12 @@ public:
 	string input_format;//bl8 , uc
 	bool BLfilter;     //do my own blast filter before LCA
 	bool calcHighMats; //calculate phylum etc level sum
-	bool hitRD;
+	bool hitRD; //show the database entry that was hit, in hiera file
 	bool isReads;
 	bool annotateAll; //give out OTU / READ even if not assigned??
 	bool nativeSlVdb;
+	bool reportID; // add column with %id match
+	bool reportBestHit; //reports best hit, if higher than required %id
 	bool checkTaxoUnkw; //check in the tax DB, if unkownn, ? etc levels are there and replaces with ?
 	int numThr; // number of threads
 	int taxDepth; //how deep does the taxonomy go?

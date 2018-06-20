@@ -37,6 +37,9 @@ string TaxObj::getWriteString() {
 			ret += __defaultTaxSep + SavedTaxs[i];
 		}
 	}
+	if (repID) {
+		ret += __defaultTaxSep + to_string(perID);
+	}
 	return ret;
 }
 
@@ -68,7 +71,7 @@ TaxObj::TaxObj(const string& X,int d, bool nativeSLV, bool doNotCheckTax):SavedT
 			SavedTaxs[cnt] = substr;
 		} else {
 			//is already "?"
-			int x=0;
+			;
 		}
 		cnt++;
 		if (cnt >= d) {

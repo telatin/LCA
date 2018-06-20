@@ -5,7 +5,7 @@
 #include "LCAimpl.h"
 #include "Matrix.h"
 
-const char* LCA_ver = "0.17		alpha";
+const char* LCA_ver = "0.19		alpha";
 
 void helpMsg() {
 	cout << "LCA requires at least 3 arguments (-i, -r, -o)\n For more help and options, use \"./LCA -h\"\n";
@@ -56,6 +56,7 @@ int main(int argc, char* argv[])
 	ofstream O(OPT->outF.c_str());
 	O << IDname << "\t" << OPT->TaxLvl2string();
 	if (OPT->hitRD) { O << "\tHit2DB"; }
+	if (OPT->reportID) { O << "\t%ID"; }
 	O << endl;// Domain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tOTU\n";
 
 
