@@ -82,6 +82,7 @@ options::options(int argc, char **argv,int defDep):
 
 	}
 
+
 	if (hitRD) {//needs to add 1 extra entry to some vectors
 		/*taxDepth++;
 		idThr.resize(taxDepth, 0);
@@ -113,6 +114,14 @@ options::options(int argc, char **argv,int defDep):
 			idThr[i] = atoi(idthrsrev[6 - i].c_str());
 		}
 	}
+
+	//simply overwrite to low values..
+	if (reportBestHit) {
+		for (size_t i = 0; i < 7; i++) {
+			idThr[i] = 1;
+		}
+	}
+
 
 	vector<string> defTLvls(8, "");
 	defTLvls[0] = "Domain"; defTLvls[1] = "Phylum"; defTLvls[2] = "Class";

@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
 				TaxObj* tmp = sCore[ti];
 #endif
 				if (!multiDBuse){	//and write the tax out
-					O << (tmp)->Subj << "\t" << (tmp)->getWriteString() << endl;
+					O << (tmp)->Subj << "\t" << (tmp)->getWriteString(OPT->idThr) << endl;
 					if (highLvl) {
 						mat->add(tmp);
 					}
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
 
 //work through remaining hits from multi DBs.. should not go through here in single DB mode
 	for (auto it = assign.begin(); it != assign.end(); it++) {
-		O << (it->second)->Subj << "\t" << (it->second)->getWriteString() << endl;
+		O << (it->second)->Subj << "\t" << (it->second)->getWriteString(OPT->idThr) << endl;
 		if (highLvl) {
 			mat->add(it->second);
 		}

@@ -11,7 +11,7 @@ struct TaxObj
 	TaxObj(TaxObj*t);
 	TaxObj(int d) :SavedTaxs(d, __unkwnTax), Subj(""), perID(0.f),depth(d) {}
 	//functions
-	string getWriteString();
+	string getWriteString(const vector<double>&);
 	void copy_vals(TaxObj*t) { SavedTaxs = t->SavedTaxs; depth = t->depth; }
 	void setRepID(bool x) { repID = x; }
 	//get tax at depth x
