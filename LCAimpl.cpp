@@ -14,7 +14,6 @@ TaxObj* LCA(list<BlastRes*> BR, RefTax* RT, options* opt) {
 	else {
 		bestScore = (*BR.begin())->perID * (double)(*BR.begin())->alLen;
 	}
-	float bestPerID = (*BR.begin())->perID;
 	float avgPerID(0.f);
 	list<TaxObj*> allTax = BlastToTax(BR, RT, opt, avgPerID);
 	
@@ -25,21 +24,17 @@ TaxObj* LCA(list<BlastRes*> BR, RefTax* RT, options* opt) {
 	cout << (*BR.begin())->Query << endl;
 #endif
 	bool singularHit(false);
-	
 	TaxObj* ret = LCAcore(allTax,singularHit,opt->LCAfract,opt->taxDepth) ;
-	ret->setRepID(opt->reportID);
 	ret->Subj = (*BR.begin())->Query;
 
 	if (opt->hitRD ){
-		ret->addHitDB((*BR.begin())->Sbj);
-		ret->perID = bestPerID;
-		/*if (opt->reportBestHit && (*BR.begin())->perID >= opt->idThr.back()) {
+		if (opt->reportBestHit && (*BR.begin())->perID >= opt->idThr.back()) {
 			ret->addHitDB((*BR.begin())->Sbj);
 		} else if (singularHit) {
 			ret->addHitDB((*BR.begin())->Sbj);
 		} else {
 			ret->addHitDB(__unkwnTax);
-		}*/
+		}
 	}
 	ret->perID = avgPerID;
 

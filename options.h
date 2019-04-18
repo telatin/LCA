@@ -22,7 +22,6 @@ public:
 	bool isReads;
 	bool annotateAll; //give out OTU / READ even if not assigned??
 	bool nativeSlVdb;
-	bool reportID; // add column with %id match
 	bool reportBestHit; //reports best hit, if higher than required %id
 	bool checkTaxoUnkw; //check in the tax DB, if unkownn, ? etc levels are there and replaces with ?
 	int numThr; // number of threads
