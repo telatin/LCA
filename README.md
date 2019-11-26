@@ -21,3 +21,4 @@ Optional arguments:
   * **-LCAfrac**: [0-1] the fraction of matching taxonomies required to accept this taxonomy on the different levels. _Default=0.8_
   * **-id**: comma seperated list of min %identity, to accept a database hit as applicable to this taxonomic level, starting from Species and going to Kingdom. _Default=97,95,93,91,88,78,0_
  
+LCA is a tool developed by [Falk Hildebrand](https://github.com/hildebra/) and packaged in Lotus, a suite for metabarcoding data analysis.
