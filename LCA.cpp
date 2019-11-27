@@ -5,7 +5,7 @@
 #include "LCAimpl.h"
 #include "Matrix.h"
 
-const char* LCA_ver = "0.18		alpha";
+const char* LCA_ver = "0.19		alpha";
 
 void helpMsg() {
 	cout << "LCA requires at least 3 arguments (-i, -r, -o)\n For more help and options, use \"./LCA -h\"\n";
@@ -56,6 +56,7 @@ int main(int argc, char* argv[])
 	ofstream O(OPT->outF.c_str());
 	O << IDname << "\t" << OPT->TaxLvl2string();
 	if (OPT->hitRD) { O << "\tHit2DB"; }
+	if (OPT->reportID) { O << "\t%ID"; }
 	O << endl;// Domain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tOTU\n";
 
 
@@ -94,7 +95,7 @@ int main(int argc, char* argv[])
 				TaxObj* tmp = sCore[ti];
 #endif
 				if (!multiDBuse){	//and write the tax out
-					O << (tmp)->Subj << "\t" << (tmp)->getWriteString() << endl;
+					O << (tmp)->Subj << "\t" << (tmp)->getWriteString(OPT->idThr) << endl;
 					if (highLvl) {
 						mat->add(tmp);
 					}
@@ -145,7 +146,7 @@ int main(int argc, char* argv[])
 
 //work through remaining hits from multi DBs.. should not go through here in single DB mode
 	for (auto it = assign.begin(); it != assign.end(); it++) {
-		O << (it->second)->Subj << "\t" << (it->second)->getWriteString() << endl;
+		O << (it->second)->Subj << "\t" << (it->second)->getWriteString(OPT->idThr) << endl;
 		if (highLvl) {
 			mat->add(it->second);
 		}

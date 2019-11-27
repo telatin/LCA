@@ -28,14 +28,17 @@ TaxObj::TaxObj(TaxObj* t):SavedTaxs(t->SavedTaxs), Subj(t->Subj), perID(t->perID
 	;
 }
 
-string TaxObj::getWriteString() {
+string TaxObj::getWriteString(const vector<double>& ids) {
 	string ret(SavedTaxs[0]);
 	for (int i = 1; i < (int) SavedTaxs.size(); i++) {
-		if (i >= depth || SavedTaxs[i] == __unkwnTax) {
+		if (i >= depth || SavedTaxs[i] == __unkwnTax || (i<7 && perID<ids[i])) {
 			ret += __defaultTaxSep + __unkwnTaxWR;
 		} else {
 			ret += __defaultTaxSep + SavedTaxs[i];
 		}
+	}
+	if (repID) {
+		ret += __defaultTaxSep + to_string(perID);
 	}
 	return ret;
 }
