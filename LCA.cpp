@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 
 
 	//some stats
-	int dblSbj(0); int replSbjTax(0);
+	int dblSbj(0); int replSbjTax(0); int Taxwritten = 0;
 	//only 1 DB use? Doesn't need to keep hits in mem..
 	bool multiDBuse = true; 
 	if (OPT->refDBs.size() == 1) { multiDBuse = false; }
@@ -96,6 +96,7 @@ int main(int argc, char* argv[])
 #endif			
 				if (!multiDBuse){	//and write the tax out
 					O << (tmp)->Subj << "\t" << (tmp)->getWriteString(OPT->idThr) << endl;
+					Taxwritten++;
 					if (highLvl) {
 						mat->add(tmp);
 					}
@@ -147,6 +148,7 @@ int main(int argc, char* argv[])
 //work through remaining hits from multi DBs.. should not go through here in single DB mode
 	for (auto it = assign.begin(); it != assign.end(); it++) {
 		O << (it->second)->Subj << "\t" << (it->second)->getWriteString(OPT->idThr) << endl;
+		Taxwritten++;
 		if (highLvl) {
 			mat->add(it->second);
 		}
@@ -154,7 +156,8 @@ int main(int argc, char* argv[])
 		//into file now
 	}
 	O.close();
-	//clean up 
+	//clean up
+	cout << "Wrote " << Taxwritten << " LCA tax assignments\n";
 
 	if (highLvl) {
 		mat->writeAllLevels(OPT->outF);

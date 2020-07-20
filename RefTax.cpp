@@ -190,9 +190,9 @@ BlastRes::BlastRes(const string& line, int inptFmt):
 	fp = f1 + 1; f1 = line.find("\t", f1 + 1);
 	if (f1 == string::npos) { fail = true; return; }
 	alLen = atoi(line.substr(fp, f1-fp).c_str());
-	//inserts
-	f1 = line.find("\t", f1 + 1);
 	//mismatches
+	f1 = line.find("\t", f1 + 1);
+	//inserts
 	f1 = line.find("\t", f1 + 1);
 	//qstart
 	fp = f1 + 1;  f1 = line.find("\t", fp);
