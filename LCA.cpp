@@ -158,6 +158,7 @@ int main(int argc, char* argv[])
 		//into file now
 	}
 	O.close();
+	TaxRead--;
 	//clean up
 	cout << "Wrote " << Taxwritten << "/" << TaxRead << " LCA tax assignments\n";
 

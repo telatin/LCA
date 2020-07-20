@@ -167,6 +167,8 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 	
 	std::list<BlastRes*>::iterator i = BR.begin();
 	while (i != BR.end())	{
+
+		/*
 		if (((*i)->alLen * lengthToleranceF) < maxL) {
 			int xxx = 1; cerr << "L";
 		}
@@ -176,7 +178,7 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 		if (((*i)->perID + tolerance) < bestID) {
 			int xxx = 1; cerr << "I";
 		}
-
+		*/
 		
 		if ( ((*i)->perID + tolerance) < bestID ||
 			((*i)->alLen * lengthToleranceF) < maxL || 
@@ -186,7 +188,7 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 			++i;
 		}
 	}
-	cerr << "\n";
+	//cerr << "\n";
 
 	//filter done
 	return bestID*(double)maxL;
