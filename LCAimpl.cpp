@@ -167,6 +167,17 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 	
 	std::list<BlastRes*>::iterator i = BR.begin();
 	while (i != BR.end())	{
+		if (((*i)->alLen * lengthToleranceF) < maxL) {
+			int xxx = 1;
+		}
+		if (((*i)->Qcoverage < minCov)) {
+			int xxx = 1;
+		}
+		if ((*i)->Qcoverage < minCov) {
+			int xxx = 1;
+		}
+
+		
 		if ( ((*i)->perID + tolerance) < bestID ||
 			((*i)->alLen * lengthToleranceF) < maxL || 
 			(*i)->Qcoverage < minCov) {
