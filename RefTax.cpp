@@ -169,8 +169,8 @@ void RefTax::stats() {
 //*******************************************************
 
 BlastRes::BlastRes(const string& line, int inptFmt):
-		Query(""), Sbj(""), alLen(0), perID(0.f), eval(100.f), score(0.f),
-		fail(false){
+		Query(""), Sbj(""), alLen(0), perID(0.f), eval(-1.f), score(0.f),
+		Qcoverage(0.f),fail(false){
 
 	if (line.length()==0){ fail = true; return; }
 	size_t f1 = line.find("\t");
@@ -193,9 +193,13 @@ BlastRes::BlastRes(const string& line, int inptFmt):
 	//inserts
 	f1 = line.find("\t", f1 + 1);
 	//qstart
-	f1 = line.find("\t", f1 + 1);
+	fp = f1 + 1;  f1 = line.find("\t", fp);
+	float qs = atof(line.substr(fp, f1 - fp).c_str());
 	//qstop
-	f1 = line.find("\t", f1 + 1);
+	fp = f1 + 1; f1 = line.find("\t", fp);
+	float qe = atof(line.substr(fp, f1 - fp).c_str());
+	Qcoverage = alLen / (qe - qs + 1);
+	/*  no needed: eval + bit score
 	//sstart
 	f1 = line.find("\t", f1 + 1);
 	//sstop
@@ -204,9 +208,13 @@ BlastRes::BlastRes(const string& line, int inptFmt):
 	//eval
 	fp = f1 + 1; f1 = line.find("\t", f1 + 1);
 	if (f1 == string::npos) { fail = true; return; }
-	eval = atof(line.substr(fp, f1-fp).c_str());
+	string tmp = line.substr(fp, f1 - fp);
+	if (tmp != "*") {
+		eval = atof(tmp.c_str());
+		score = atof(line.substr(f1 + 1).c_str());
+	}
 	//score
-	score = atof(line.substr(f1+1).c_str());
+	*/
 
 }
 

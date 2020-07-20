@@ -5,7 +5,7 @@
 #include "LCAimpl.h"
 #include "Matrix.h"
 
-const char* LCA_ver = "0.19		alpha";
+const char* LCA_ver = "0.20		alpha";
 
 void helpMsg() {
 	cout << "LCA requires at least 3 arguments (-i, -r, -o)\n For more help and options, use \"./LCA -h\"\n";
@@ -87,13 +87,13 @@ int main(int argc, char* argv[])
 			if (allRead && ti_end == ti) {//no more blast results
 				cout << "Done Blast File reading\n"; break;
 			}
-			if (burninDone) {
+			if (burninDone && sCore[ti] != NULL) {
 				//assigns.push_back(parvec[ti].get());
 #ifdef parallel
 				TaxObj* tmp = parvec[ti].get();
 #else
 				TaxObj* tmp = sCore[ti];
-#endif
+#endif			
 				if (!multiDBuse){	//and write the tax out
 					O << (tmp)->Subj << "\t" << (tmp)->getWriteString(OPT->idThr) << endl;
 					if (highLvl) {

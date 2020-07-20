@@ -7,14 +7,10 @@ TaxObj* LCA(list<BlastRes*> BR, RefTax* RT, options* opt) {
 	
 	
 	//primary blast filter
-	double bestScore(0.f);
-	if (opt->BLfilter) {
-		bestScore = filterBlastPrimary(BR);
-	}
-	else {
-		bestScore = (*BR.begin())->perID * (double)(*BR.begin())->alLen;
-	}
-	float bestPerID = (*BR.begin())->perID;
+	double bestPerID(0.f);
+	double bestScore = filterBlastPrimary(BR,opt, bestPerID);
+	if (BR.size() == 0) { return NULL; } // empty, just return empty string
+
 	float avgPerID(0.f);
 	list<TaxObj*> allTax = BlastToTax(BR, RT, opt, avgPerID);
 	
@@ -32,7 +28,7 @@ TaxObj* LCA(list<BlastRes*> BR, RefTax* RT, options* opt) {
 
 	if (opt->hitRD ){
 		ret->addHitDB((*BR.begin())->Sbj);
-		ret->perID = bestPerID;
+		ret->perID = (float) bestPerID;
 		/*if (opt->reportBestHit && (*BR.begin())->perID >= opt->idThr.back()) {
 			ret->addHitDB((*BR.begin())->Sbj);
 		} else if (singularHit) {
@@ -143,8 +139,14 @@ TaxObj* LCAcore(list<TaxObj*> TO, bool &hitRd, double LCAfrac, int tdepth) {
 	return ret;
 }
 
-double filterBlastPrimary(list<BlastRes*>& BR,bool maxHitOnly) {
-	double bestID(0.f); int maxL(0);
+double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
+	
+	if (!opt->BLfilter) {
+		return (*BR.begin())->perID * (double)(*BR.begin())->alLen;
+	}
+
+	float minCov = opt->minCover;
+	int maxL(0);
 	
 	for (auto it = BR.begin(); it != BR.end();it++) {
 		if ((*it)->perID > bestID && (*it)->alLen >= maxL*0.95) { bestID = (*it)->perID; maxL = (*it)->alLen;}
@@ -152,9 +154,11 @@ double filterBlastPrimary(list<BlastRes*>& BR,bool maxHitOnly) {
 	}
 	
 	//filter parameters
-	double lengthTolerance(0.85);
+	double lengthToleranceF(0.85);
 	double tolerance(1.5);
-	if (maxHitOnly) { tolerance = 0.f; }
+	if (opt->reportBestHit) {
+		tolerance = 0.f; lengthToleranceF= 1.f;
+	}
 	else if (bestID >= 100) { tolerance = 0.1f; }
 	else if (bestID >= 99.5) { tolerance = 0.25f; }
 	else if (bestID >= 99) { tolerance = 0.5f; }
@@ -163,8 +167,9 @@ double filterBlastPrimary(list<BlastRes*>& BR,bool maxHitOnly) {
 	
 	std::list<BlastRes*>::iterator i = BR.begin();
 	while (i != BR.end())	{
-		if (((*i)->perID + tolerance) < bestID ||
-			((*i)->alLen + lengthTolerance) < maxL) {
+		if ( ((*i)->perID + tolerance) < bestID ||
+			((*i)->alLen * lengthToleranceF) < maxL || 
+			(*i)->Qcoverage < minCov) {
 			BR.erase(i++);
 		} else {
 			++i;

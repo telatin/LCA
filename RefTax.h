@@ -66,6 +66,7 @@ struct BlastRes
 	string Query, Sbj;
 	int alLen;
 	double perID, eval,score;
+	float Qcoverage;
 	bool fail;
 };
 

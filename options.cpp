@@ -25,6 +25,7 @@ void self_help() {
 	cout << "  -LCAfrac       [0-1] the fraction of matching taxonomies required to accept this taxonomy on the different levels. Default=\"0.8\"\n";
 //	cout << "  -t             number of threads to use, currently deactivated on linux as it requires C++11\n";
 	cout << "  -id            comma seperated list of min %identity, to accept a database hit as applicable to this taxonomic level, starting from Species and going to Kingdom. Default=\"97,95,93,91,88,78,0\"\n";
+	cout << "  -cover         [0-1] fraction of query coverage required to accept a hit. Default=0.5\n";
 	cout << endl;
 	exit(0);
 }
@@ -34,7 +35,7 @@ options::options(int argc, char **argv,int defDep):
 	RefTaxFile(""), blastres(""), outF(""), input_format("bl8"),
 	BLfilter(true), calcHighMats(false), hitRD(false), isReads(false),
 	annotateAll(false), nativeSlVdb(false), reportID(false), checkTaxoUnkw(true),
-	numThr(1), taxDepth(defDep), LCAfract(0.9f), idThr(defDep,0),
+	numThr(1), taxDepth(defDep), LCAfract(0.9f), minCover(0.5f), idThr(defDep,0),
 	blFiles(0), refDBs(0), Taxlvls(defDep), reportBestHit(false)
 {
 	idThr[1] = 78; idThr[2] = 88; idThr[3] = 91; idThr[4] = 93;
@@ -74,6 +75,8 @@ options::options(int argc, char **argv,int defDep):
 			annotateAll = true;
 		else if (!strcmp(argv[i], "-t"))
 			numThr = atoi(argv[++i]);
+		else if (!strcmp(argv[i], "-cover"))
+			minCover = atof(argv[++i]);
 		else if (!strcmp(argv[i], "-LCAfrac"))
 			LCAfract = atof(argv[++i]);
 		else if (!strcmp(argv[i], "-id")) {

@@ -28,6 +28,7 @@ public:
 	int numThr; // number of threads
 	int taxDepth; //how deep does the taxonomy go?
 	double LCAfract;
+	float minCover;
 	vector<double> idThr;
 	vector<string> blFiles, refDBs;
 	vector<string> Taxlvls;
