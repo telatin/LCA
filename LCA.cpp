@@ -159,7 +159,7 @@ int main(int argc, char* argv[])
 	}
 	O.close();
 	//clean up
-	cout << "Wrote " << Taxwritten << " LCA tax assignments\n";
+	cout << "Wrote " << Taxwritten << "/" << TaxRead << " LCA tax assignments\n";
 
 	if (highLvl) {
 		mat->writeAllLevels(OPT->outF);
@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
 	delete mat; delete OPT;
 
 	if (dblSbj>0) {
-		cout << "Found " << dblSbj << " double subject sequences in "<< OPT->refDBs.size()<<"/"<< TaxRead << ", reassigned " << replSbjTax << " of these." << endl;
+		cout << "Found " << dblSbj << " double subject sequences in "<< OPT->refDBs.size()<<", reassigned " << replSbjTax << " of these." << endl;
 	}
 	printf("LCA finished. Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 
