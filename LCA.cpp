@@ -61,7 +61,8 @@ int main(int argc, char* argv[])
 
 
 	//some stats
-	int dblSbj(0); int replSbjTax(0); int Taxwritten = 0;
+	int dblSbj(0); int replSbjTax(0); 
+	int Taxwritten = 0; int TaxRead = 0;
 	//only 1 DB use? Doesn't need to keep hits in mem..
 	bool multiDBuse = true; 
 	if (OPT->refDBs.size() == 1) { multiDBuse = false; }
@@ -120,6 +121,7 @@ int main(int argc, char* argv[])
 
 			//don't forget to destroy this object -> yes, done in LCA algo (better for async operation)
 			list<BlastRes*> tmpB = BR->getResBatch();
+			TaxRead++;
 
 			//check if this position LCA is finished
 			if (!allRead) {
@@ -165,7 +167,7 @@ int main(int argc, char* argv[])
 	delete mat; delete OPT;
 
 	if (dblSbj>0) {
-		cout << "Found " << dblSbj << " double subject sequences in "<< OPT->refDBs.size()<< ", reassigned " << replSbjTax << " of these." << endl;
+		cout << "Found " << dblSbj << " double subject sequences in "<< OPT->refDBs.size()<<"/"<< TaxRead << ", reassigned " << replSbjTax << " of these." << endl;
 	}
 	printf("LCA finished. Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 

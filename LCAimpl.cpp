@@ -154,10 +154,10 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 	}
 	
 	//filter parameters
-	double lengthToleranceF(0.85);
+	double lengthToleranceF(1.15);
 	double tolerance(1.5);
 	if (opt->reportBestHit) {
-		tolerance = 0.f; lengthToleranceF= 1.f;
+		tolerance = 0.f; lengthToleranceF= 1.05f;
 	}
 	else if (bestID >= 100) { tolerance = 0.1f; }
 	else if (bestID >= 99.5) { tolerance = 0.25f; }
@@ -168,13 +168,13 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 	std::list<BlastRes*>::iterator i = BR.begin();
 	while (i != BR.end())	{
 		if (((*i)->alLen * lengthToleranceF) < maxL) {
-			int xxx = 1;
+			int xxx = 1; cerr << "L";
 		}
 		if (((*i)->Qcoverage < minCov)) {
-			int xxx = 1;
+			int xxx = 1; cerr << "C";
 		}
-		if ((*i)->Qcoverage < minCov) {
-			int xxx = 1;
+		if (((*i)->perID + tolerance) < bestID) {
+			int xxx = 1; cerr << "I";
 		}
 
 		
@@ -186,6 +186,7 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 			++i;
 		}
 	}
+	cerr << "\n";
 
 	//filter done
 	return bestID*(double)maxL;
