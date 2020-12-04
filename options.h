@@ -32,5 +32,6 @@ public:
 	vector<double> idThr;
 	vector<string> blFiles, refDBs;
 	vector<string> Taxlvls;
+	bool version;
 };
 

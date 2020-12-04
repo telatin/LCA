@@ -200,13 +200,17 @@ BlastRes::BlastRes(const string& line, int inptFmt):
 	//qstop
 	fp = f1 + 1; f1 = line.find("\t", fp);
 	float qe = atof(line.substr(fp, f1 - fp).c_str());
-	Qcoverage = alLen / abs(qe - qs);
-	/*  no needed: eval + bit score
 	//sstart
 	f1 = line.find("\t", f1 + 1);
 	//sstop
 	f1 = line.find("\t", f1 + 1);
-	f1 = line.find("\t", f1 + 1);
+//ql
+	fp = f1 + 1; f1 = line.find("\t", fp);
+	float ql = atof(line.substr(fp, f1 - fp).c_str());
+
+	Qcoverage = alLen / ql; //abs(qe - qs);
+	int x = 0;
+	/*  no needed: eval + bit score
 	//eval
 	fp = f1 + 1; f1 = line.find("\t", f1 + 1);
 	if (f1 == string::npos) { fail = true; return; }

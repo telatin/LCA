@@ -5,7 +5,7 @@
 #include "LCAimpl.h"
 #include "Matrix.h"
 
-const char* LCA_ver = "0.20		alpha";
+const char* LCA_ver = "0.21";
 
 void helpMsg() {
 	cout << "LCA requires at least 3 arguments (-i, -r, -o)\n For more help and options, use \"./LCA -h\"\n";
@@ -21,11 +21,15 @@ void welcomeMsg() {
 int main(int argc, char* argv[])
 {
 	
-	welcomeMsg();
 	//measure execution time
 	clock_t tStart = clock();
 
 	options* OPT = new options(argc, argv, __default_depth);
+	if (OPT->version) {
+		cout << LCA_ver << endl;
+		exit(0);
+	}
+	welcomeMsg();
 
 
 	if (argc < 2) {

@@ -36,7 +36,7 @@ options::options(int argc, char **argv,int defDep):
 	BLfilter(true), calcHighMats(false), hitRD(false), isReads(false),
 	annotateAll(false), nativeSlVdb(false), reportID(false), checkTaxoUnkw(true),
 	numThr(1), taxDepth(defDep), LCAfract(0.9f), minCover(0.5f), idThr(defDep,0),
-	blFiles(0), refDBs(0), Taxlvls(defDep), reportBestHit(false)
+	blFiles(0), refDBs(0), Taxlvls(defDep), reportBestHit(false), version(false)
 {
 	idThr[1] = 78; idThr[2] = 88; idThr[3] = 91; idThr[4] = 93;
 	idThr[5] = 95; idThr[6] = 97;
@@ -53,6 +53,8 @@ options::options(int argc, char **argv,int defDep):
 			RefTaxFile = argv[++i];
 		else if (!strcmp(argv[i], "-f"))//input format
 			input_format = argv[++i];
+		else if (!strcmp(argv[i], "-v"))
+			version = true;
 		else if (!strcmp(argv[i], "-o"))
 			outF = argv[++i];
 		else if (!strcmp(argv[i], "-matHigh"))
@@ -84,7 +86,7 @@ options::options(int argc, char **argv,int defDep):
 		}
 
 	}
-
+	if (version) { return; }
 
 	if (hitRD) {//needs to add 1 extra entry to some vectors
 		/*taxDepth++;
