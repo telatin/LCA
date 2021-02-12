@@ -22,7 +22,8 @@ LDFLAGS += $(foreach library,$(program_LIBRARIES),-l$(library))
 all: $(program_NAME)
 
 $(program_NAME): $(program_OBJS)
-	$(LINK.cc) $(program_OBJS) -lz -o $(program_NAME)
+#	$(LINK.cc) $(program_OBJS) -lz -o $(program_NAME)
+	$(LINK.cc) $(program_OBJS) -lz -static --verbose -o $(program_NAME)
 
 clean:
 	@- $(RM) $(program_NAME)
