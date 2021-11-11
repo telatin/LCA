@@ -5,7 +5,7 @@
 #include "LCAimpl.h"
 #include "Matrix.h"
 
-const char* LCA_ver = "0.21";
+const char* LCA_ver = "0.22";
 
 void helpMsg() {
 	cout << "LCA requires at least 3 arguments (-i, -r, -o)\n For more help and options, use \"./LCA -h\"\n";

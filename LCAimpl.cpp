@@ -154,18 +154,22 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 	}
 	
 	//filter parameters
-	double lengthToleranceF(1.15);
+	double lengthToleranceF(0.9f);
 	double tolerance(1.5);
 	if (opt->reportBestHit) {
 		tolerance = 0.f; lengthToleranceF= 1.05f;
 	}
-	else if (bestID >= 100) { tolerance = 0.1f; }
-	else if (bestID >= 99.5) { tolerance = 0.25f; }
-	else if (bestID >= 99) { tolerance = 0.5f; }
-	else if (bestID >= 98) { tolerance = 1.f; }
-	else if (bestID >= 97) { tolerance = 1.25f; }
+	else if (bestID >= 100) { tolerance = 0.05f; }
+	else if (bestID >= 99.5) { tolerance = 0.15f; }
+	else if (bestID >= 99) { tolerance = 0.25f; }
+	else if (bestID >= 98) { tolerance = 0.75f; }
+	else if (bestID >= 97) { tolerance = 1.0f; }
 	
 	std::list<BlastRes*>::iterator i = BR.begin();
+
+	//precalc maxL
+	maxL *= lengthToleranceF;
+
 	while (i != BR.end())	{
 
 		/*
@@ -181,7 +185,7 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 		*/
 		
 		if ( ((*i)->perID + tolerance) < bestID ||
-			((*i)->alLen * lengthToleranceF) < maxL || 
+			((*i)->alLen ) < maxL || 
 			(*i)->Qcoverage < minCov) {
 			BR.erase(i++);
 		} else {
@@ -201,6 +205,7 @@ list<TaxObj*> BlastToTax(list<BlastRes*>& BR, RefTax* RT, options* opt, float& c
 
 
 	int depth = RT->depth();
+	bool anySpeciesCertain(false);
 	for (auto it = BR.begin(); it != BR.end(); it++) {
 		double curID((*it)->perID);
 		consPerID += (float)curID;
@@ -212,11 +217,21 @@ list<TaxObj*> BlastToTax(list<BlastRes*>& BR, RefTax* RT, options* opt, float& c
 			while (maxD < depth && thr[maxD] < curID ) { maxD++; }
 			F->depth = maxD;
 			ret.push_back(F);
+			if (!F->speciesUncertain) { anySpeciesCertain = true; }
 		}	else {
 			cerr << "Could not find tax for Subject " << (*it)->Sbj << endl;
 			exit(74);
 		}
 	}
 	consPerID /= BR.size();
+
+	//remove uncertain species, in case of enough good hits
+	if (anySpeciesCertain && ret.size() > 1) {
+		for (auto it = ret.begin(); it != ret.end(); it++) {
+			(*it)->makeSpeciesUnknown();
+		}
+	}
+
+
 	return ret;
 }

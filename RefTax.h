@@ -9,11 +9,12 @@ struct TaxObj
 {
 	TaxObj(const string&, int, bool nativeSLV, bool doNotCheckTax);
 	TaxObj(TaxObj*t);
-	TaxObj(int d) :SavedTaxs(d, __unkwnTax), Subj(""), perID(0.f),depth(d) {}
+	TaxObj(int d) :SavedTaxs(d, __unkwnTax), Subj(""), perID(0.f), speciesUncertain(false),depth(d) {}
 	//functions
 	string getWriteString(const vector<double>&);
 	void copy_vals(TaxObj*t) { SavedTaxs = t->SavedTaxs; depth = t->depth; }
 	void setRepID(bool x) { repID = x; }
+	void makeSpeciesUnknown() { if (speciesUncertain) { SavedTaxs[SavedTaxs.size() - 1] = __unkwnTax; } }
 	//get tax at depth x
 	string& get(int x) { if (x > depth) {  return __unkwnTax; } return SavedTaxs[x]; }
 	void set(int x, string v) { 
@@ -31,6 +32,7 @@ struct TaxObj
 	string Subj;
 	float perID;
 	bool repID;
+	bool speciesUncertain;
 	int depth;//saves explicitly the depth, taking ? etc into account
 
 };

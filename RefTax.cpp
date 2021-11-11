@@ -24,7 +24,8 @@ bool isGZfile(const string fi) {
 
 
 
-TaxObj::TaxObj(TaxObj* t):SavedTaxs(t->SavedTaxs), Subj(t->Subj), perID(t->perID),depth(t->depth) {
+TaxObj::TaxObj(TaxObj* t):SavedTaxs(t->SavedTaxs), Subj(t->Subj), perID(t->perID),
+speciesUncertain(t->speciesUncertain),depth(t->depth) {
 	;
 }
 
@@ -45,7 +46,8 @@ string TaxObj::getWriteString(const vector<double>& ids) {
 
 
 
-TaxObj::TaxObj(const string& X,int d, bool nativeSLV, bool doNotCheckTax):SavedTaxs(d, __unkwnTax), Subj(""), perID(0.f),depth(0){
+TaxObj::TaxObj(const string& X,int d, bool nativeSLV, bool doNotCheckTax):
+	SavedTaxs(d, __unkwnTax), Subj(""), perID(0.f), speciesUncertain(false),depth(0){
 	size_t fnd = 0;
 	//size_t offset = 1;
 	if (!nativeSLV) {
@@ -64,8 +66,28 @@ TaxObj::TaxObj(const string& X,int d, bool nativeSLV, bool doNotCheckTax):SavedT
 		}
 		trim(substr);
 		string lcsubstr(substr); transform(lcsubstr.begin(), lcsubstr.end(), lcsubstr.begin(), ::tolower);
+		
+		
+
 		bool taxKnown = substr.length() > 0 && lcsubstr != "unclassified" && lcsubstr != "uncultured bacterium"
 			&& lcsubstr != "uncultured" && substr != "?";
+		
+		if (taxKnown && cnt == 6) {//species level.. remove strain info
+			size_t pos = substr.find(" ");
+			pos = substr.find(" ", pos + 1);
+			substr = substr.substr(0, pos);
+			//some special rules for species level tax unknowns..
+			pos = substr.find("sp.");
+			if (pos == substr.length() - 3 &&
+				substr.substr(0,pos-1) == SavedTaxs[cnt-1]) {
+				speciesUncertain = true;
+			}
+			if (lcsubstr.find("uncultured") == 0 || 
+				lcsubstr.find("unclassified") == 0 ) {//uncultured blah.. remove
+				speciesUncertain = true;
+			}
+
+		}
 		if ( doNotCheckTax || taxKnown) {
 			depth = cnt+1;
 			SavedTaxs[cnt] = substr;
@@ -73,6 +95,7 @@ TaxObj::TaxObj(const string& X,int d, bool nativeSLV, bool doNotCheckTax):SavedT
 			//is already "?"
 			;
 		}
+
 		cnt++;
 		if (cnt >= d) {
 			break;
@@ -266,7 +289,10 @@ list<BlastRes*> BlastReader::getResBatch() {
 	}
 	list <BlastRes*> ret(0);
 	if (lastBlast == NULL || allRead || lastBlast->fail ) { return ret; }
+	unordered_map<std::string, int> foundSbjs;
+	unordered_map<std::string, int>::iterator Sfound;
 	ret.push_back(lastBlast);
+	foundSbjs[lastBlast->Sbj] = 1;
 	string cmpQu = lastBlast->Query;
 	while (1) {
 		if (!getline(*blast, line, '\n')) {
@@ -279,7 +305,12 @@ list<BlastRes*> BlastReader::getResBatch() {
 			lastBlast = blr;
 			break;
 		}
-		ret.push_back(blr);
+		
+		if (foundSbjs.find(blr->Sbj) == foundSbjs.end()) {
+			//only insert once each subject
+			ret.push_back(blr);
+			foundSbjs[blr->Sbj] = 1;
+		}
 	}
 
 	return ret;
