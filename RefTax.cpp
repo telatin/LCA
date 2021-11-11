@@ -75,17 +75,18 @@ TaxObj::TaxObj(const string& X,int d, bool nativeSLV, bool doNotCheckTax):
 		if (taxKnown && cnt == 6) {//species level.. remove strain info
 			size_t pos = substr.find(" ");
 			pos = substr.find(" ", pos + 1);
-			substr = substr.substr(0, pos);
 			//some special rules for species level tax unknowns..
-			pos = substr.find("sp.");
-			if (pos == substr.length() - 3 &&
-				substr.substr(0,pos-1) == SavedTaxs[cnt-1]) {
+			size_t pos2 = substr.find("sp.");
+			if (lcsubstr.find("uncultured") == 0 ||
+				lcsubstr.find("unclassified") == 0) {//uncultured blah.. remove
 				speciesUncertain = true;
-			}
-			if (lcsubstr.find("uncultured") == 0 || 
-				lcsubstr.find("unclassified") == 0 ) {//uncultured blah.. remove
+			} else if (pos2 == pos - 3 &&
+				substr.substr(0,pos2-1) == SavedTaxs[cnt-1]) {
 				speciesUncertain = true;
+			} else {
+				substr = substr.substr(0, pos);
 			}
+			
 
 		}
 		if ( doNotCheckTax || taxKnown) {
