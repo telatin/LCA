@@ -29,6 +29,7 @@ public:
 	int taxDepth; //how deep does the taxonomy go?
 	double LCAfract;
 	float minCover;
+	double minAliLen;
 	vector<double> idThr;
 	vector<string> blFiles, refDBs;
 	vector<string> Taxlvls;

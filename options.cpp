@@ -35,7 +35,7 @@ options::options(int argc, char **argv,int defDep):
 	RefTaxFile(""), blastres(""), outF(""), input_format("bl8"),
 	BLfilter(true), calcHighMats(false), hitRD(false), isReads(false),
 	annotateAll(false), nativeSlVdb(false), reportID(false), checkTaxoUnkw(true),
-	numThr(1), taxDepth(defDep), LCAfract(0.9f), minCover(0.5f), idThr(defDep,0),
+	numThr(1), taxDepth(defDep), LCAfract(0.9f), minCover(0.5f), minAliLen(75), idThr(defDep,0),
 	blFiles(0), refDBs(0), Taxlvls(defDep), reportBestHit(false), version(false)
 {
 	idThr[1] = 78; idThr[2] = 88; idThr[3] = 91; idThr[4] = 93;
@@ -67,6 +67,8 @@ options::options(int argc, char **argv,int defDep):
 			checkTaxoUnkw = false;
 		else if (!strcmp(argv[i], "-readInput"))
 			isReads = true;
+		else if (!strcmp(argv[i], "-minAlignLen"))
+			minAliLen = atof(argv[++i]);		
 		else if (!strcmp(argv[i], "-reportID"))
 			reportID = true;
 		else if (!strcmp(argv[i], "-reportBestHit"))

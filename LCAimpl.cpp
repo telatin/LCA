@@ -132,7 +132,7 @@ TaxObj* LCAcore(list<TaxObj*> TO, bool &hitRd, double LCAfrac, int tdepth) {
 		pos = -1;
 		for (auto ix = TO.begin(); ix != TO.end(); ix++) {
 			pos++;
-			if ((*ix)->get(DL) == __unkwnTax || (*ix)->get(DL) == consens) { continue; }
+			if ( (*ix)->get(DL) == consens) { continue; } //(*ix)->get(DL) == __unkwnTax ||
 			DO[pos] = false;
 		}
 	}
@@ -154,7 +154,7 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 	}
 	
 	//filter parameters
-	double lengthToleranceF(0.9f);
+	double lengthToleranceF(0.85f);
 	double tolerance(1.5);
 	if (opt->reportBestHit) {
 		tolerance = 0.f; lengthToleranceF= 1.05f;
@@ -169,6 +169,9 @@ double filterBlastPrimary(list<BlastRes*>& BR, options* opt, double& bestID) {
 
 	//precalc maxL
 	maxL *= lengthToleranceF;
+	if (maxL < opt->minAliLen) {
+		maxL = opt->minAliLen;
+	}
 
 	while (i != BR.end())	{
 
