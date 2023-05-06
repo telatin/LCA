@@ -137,7 +137,7 @@ tlevels(tdep,"")
 	//ini constants
 	//#my @taxLvls = ("domain", "phylum", "class", "order", "family", "genus");
 	//cout << "DEBUG\n\n"; return;
-	cout << "Loading tax DB.." << endl;
+	cout << "Loading tax DB.." << inF<<endl;
 
 	string line;
 	ifstream in(inF.c_str());
@@ -145,6 +145,10 @@ tlevels(tdep,"")
 	int TaxDbl(0), TaxSingl(0);
 	while (getline(in, line, '\n')) {
 		size_t dlmt = line.find("\t");
+		if (dlmt == std::string::npos) {
+			cerr << "Line " << line << " does not contain \\t character.. ignoring\n";
+			continue;
+		}
 		string ID = line.substr(0, dlmt);
 		//string ttax = line.substr(dlmt+1);
 		TaxObj* t = new TaxObj(line.substr(dlmt + 1),7, nativeSLV, !checktaxStr);
@@ -175,7 +179,7 @@ void RefTax::stats() {
 	int cnt = 0; vector<int> hist(10, 0);
 	int maxD = 0;
 	for (auto it = Tlink.begin(); it != Tlink.end(); ++it) {
-		int dep = it->second->depth -1; if (maxD < dep) { maxD = dep; }
+		int dep = it->second->depth ; if (maxD < dep) { maxD = dep; }
 		if (dep > 10) { cerr << "Tax depth " << dep << " of object " << it->first << " is too great!\n"; }
 		hist[dep]++;
 		cnt++;

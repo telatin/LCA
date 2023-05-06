@@ -4,8 +4,8 @@
 #include "RefTax.h"
 #include "LCAimpl.h"
 #include "Matrix.h"
-
-const char* LCA_ver = "0.23";
+//0.24: fixed bug of not reading "k__?; p__?; c__?; .." strings
+const char* LCA_ver = "0.24";
 
 void helpMsg() {
 	cout << "LCA requires at least 3 arguments (-i, -r, -o)\n For more help and options, use \"./LCA -h\"\n";
